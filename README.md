@@ -1,5 +1,18 @@
 [![CI badge](https://github.com/micropython/micropython/workflows/unix%20port/badge.svg)](https://github.com/micropython/micropython/actions?query=branch%3Amaster+event%3Apush) [![Coverage badge](https://coveralls.io/repos/micropython/micropython/badge.png?branch=master)](https://coveralls.io/r/micropython/micropython?branch=master)
 
+# Fork mission statement
+
+This fork based on Pico Micropython v1.15 as of now does:
+* enables UART REPL
+* disabled USB REPL
+* disabled thread support
+* runs MicroPython on core0
+* runs lwIP networking over USB on core1
+* runs webserver on core1 (http://192.168.7.1)
+
+![](2021-04-21-114354_800x480_scrot.png)
+
+
 The MicroPython project
 =======================
 <p align="center">
