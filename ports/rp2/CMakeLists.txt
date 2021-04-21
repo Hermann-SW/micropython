@@ -46,6 +46,14 @@ include(${MICROPY_DIR}/py/py.cmake)
 include(${MICROPY_DIR}/extmod/extmod.cmake)
 include(${PICO_SDK_PATH}/pico_sdk_init.cmake)
 
+# LWIP
+set(LWIP_DIR ${MICROPY_DIR}/lib/lwip)
+set (LWIP_INCLUDE_DIRS
+    "${LWIP_DIR}/src/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+include(${LWIP_DIR}/src/Filelists.cmake)
+
 # Define the top-level project
 project(${MICROPY_TARGET})
 
@@ -167,14 +175,20 @@ target_sources(${MICROPY_TARGET} PRIVATE
     ${MICROPY_SOURCE_LIB}
     ${MICROPY_SOURCE_DRIVERS}
     ${MICROPY_SOURCE_PORT}
+    tusb_lwip_glue.c
+    usb_descriptors.c
+    ${PICO_TINYUSB_PATH}/lib/networking/dhserver.c
+    ${PICO_TINYUSB_PATH}/lib/networking/rndis_reports.c
 )
 
-target_link_libraries(${MICROPY_TARGET} usermod)
+target_link_libraries(${MICROPY_TARGET} usermod lwipallapps lwipcore)
 
 target_include_directories(${MICROPY_TARGET} PRIVATE
     ${MICROPY_INC_CORE}
     ${MICROPY_INC_USERMOD}
     ${MICROPY_BOARD_DIR}
+    ${PICO_TINYUSB_PATH}/lib/networking
+    ${LWIP_DIR}/src/include
     "${PROJECT_SOURCE_DIR}"
     "${CMAKE_BINARY_DIR}"
 )

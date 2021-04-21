@@ -35,8 +35,8 @@
 
 // Board and hardware specific configuration
 #define MICROPY_HW_MCU_NAME                     "RP2040"
-#define MICROPY_HW_ENABLE_UART_REPL             (0) // useful if there is no USB
-#define MICROPY_HW_ENABLE_USBDEV                (1)
+#define MICROPY_HW_ENABLE_UART_REPL             (1) // useful if there is no USB
+#define MICROPY_HW_ENABLE_USBDEV                (0)
 
 // Memory allocation policies
 #define MICROPY_GC_STACK_ENTRY_TYPE             uint16_t
@@ -106,7 +106,7 @@
 #define MICROPY_PY_SYS_STDIO_BUFFER             (1)
 #define MICROPY_PY_SYS_PLATFORM                 "rp2"
 #define MICROPY_PY_UERRNO                       (1)
-#define MICROPY_PY_THREAD                       (1)
+#define MICROPY_PY_THREAD                       (0)
 #define MICROPY_PY_THREAD_GIL                   (0)
 
 // Extended modules

@@ -46,8 +46,12 @@
 #include "hardware/rtc.h"
 #include "hardware/structs/rosc.h"
 
+#include "pico/multicore.h"
+
+#include "tusb_lwip_glue.h"
+
 extern uint8_t __StackTop, __StackBottom;
-static char gc_heap[192 * 1024];
+static char gc_heap[189 * 1024];
 
 // Embed version info in the binary in machine readable form
 bi_decl(bi_program_version_string(MICROPY_GIT_TAG));
@@ -57,6 +61,21 @@ bi_decl(bi_program_version_string(MICROPY_GIT_TAG));
 bi_decl(bi_program_feature_group_with_flags(BINARY_INFO_TAG_MICROPYTHON,
     BINARY_INFO_ID_MP_FROZEN, "frozen modules",
     BI_NAMED_GROUP_SEPARATE_COMMAS | BI_NAMED_GROUP_SORT_ALPHA));
+
+void core1_entry()
+{
+    // Initialize tinyusb, lwip, dhcpd and httpd
+    init_lwip();
+    wait_for_netif_is_up();
+    dhcpd_init();
+    httpd_init();
+
+    while (true)
+    {
+        tud_task();
+        service_traffic();
+    }
+}
 
 int main(int argc, char **argv) {
     #if MICROPY_HW_ENABLE_UART_REPL
@@ -74,6 +93,10 @@ int main(int argc, char **argv) {
     bi_decl(bi_program_feature("thread support"))
     mp_thread_init();
     #endif
+
+    sys_timeouts_init();
+
+    multicore_launch_core1(core1_entry);
 
     // Start and initialise the RTC
     datetime_t t = {

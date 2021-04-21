@@ -51,13 +51,17 @@ int mp_interrupt_char = -1;
 void tud_cdc_rx_wanted_cb(uint8_t itf, char wanted_char) {
     (void)itf;
     (void)wanted_char;
+#if MICROPY_HW_ENABLE_USBDEV
     tud_cdc_read_char(); // discard interrupt char
+#endif
     mp_keyboard_interrupt();
 }
 
 void mp_hal_set_interrupt_char(int c) {
     mp_interrupt_char = c;
+#if MICROPY_HW_ENABLE_USBDEV
     tud_cdc_set_wanted_char(c);
+#endif
 }
 
 #endif

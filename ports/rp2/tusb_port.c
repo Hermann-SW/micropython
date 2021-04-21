@@ -49,6 +49,7 @@
 
 // Note: descriptors returned from callbacks must exist long enough for transfer to complete
 
+#if MICROPY_HW_ENABLE_USBDEV
 static const tusb_desc_device_t usbd_desc_device = {
     .bLength = sizeof(tusb_desc_device_t),
     .bDescriptorType = TUSB_DESC_DEVICE,
@@ -113,3 +114,4 @@ const uint16_t *tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
 
     return desc_str;
 }
+#endif
