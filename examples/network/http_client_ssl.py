@@ -11,7 +11,11 @@ except:
 def main(use_stream=True):
     s = _socket.socket()
 
-    ai = _socket.getaddrinfo("google.com", 443)
+    host = "stamm-wilbrandt.de"
+    hpath = "cgi-bin/sol.English.pl?60000"
+    req = "GET /" + hpath + " HTTP/1.0\r\nHost: " + host + "\r\n\r\n"
+
+    ai = _socket.getaddrinfo(host, 443)
     print("Address infos:", ai)
     addr = ai[0][-1]
 
@@ -24,12 +28,12 @@ def main(use_stream=True):
     if use_stream:
         # Both CPython and MicroPython SSLSocket objects support read() and
         # write() methods.
-        s.write(b"GET / HTTP/1.0\r\n\r\n")
+        s.write(bytes(req, 'utf-8'))
         print(s.read(4096))
     else:
         # MicroPython SSLSocket objects implement only stream interface, not
         # socket interface
-        s.send(b"GET / HTTP/1.0\r\n\r\n")
+        s.send(bytes(req, 'utf-8'))
         print(s.recv(4096))
 
     s.close()

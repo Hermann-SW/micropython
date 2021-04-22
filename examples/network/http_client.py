@@ -7,7 +7,11 @@ except:
 def main(use_stream=False):
     s = socket.socket()
 
-    ai = socket.getaddrinfo("google.com", 80)
+    host = "neverssl.com"
+    hpath = ""
+    req = "GET /" + hpath + " HTTP/1.0\r\nHost: " + host + "\r\n\r\n"
+
+    ai = socket.getaddrinfo(host, 80)
     print("Address infos:", ai)
     addr = ai[0][-1]
 
@@ -18,10 +22,10 @@ def main(use_stream=False):
         # MicroPython socket objects support stream (aka file) interface
         # directly, but the line below is needed for CPython.
         s = s.makefile("rwb", 0)
-        s.write(b"GET / HTTP/1.0\r\n\r\n")
+        s.write(bytes(req, 'utf-8'))
         print(s.read())
     else:
-        s.send(b"GET / HTTP/1.0\r\n\r\n")
+        s.send(bytes(req, 'utf-8'))
         print(s.recv(4096))
 
     s.close()
