@@ -61,7 +61,7 @@ else ifeq ($(ARCH),armv7m)
 
 # thumb
 CROSS = arm-none-eabi-
-CFLAGS += -mthumb -mcpu=cortex-m3
+CFLAGS += -mthumb -mcpu=cortex-m0plus
 MICROPY_FLOAT_IMPL ?= none
 
 else ifeq ($(ARCH),armv7emsp)
